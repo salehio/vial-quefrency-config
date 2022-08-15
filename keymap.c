@@ -19,6 +19,8 @@ enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   ALT_TAB,
   CTL_TAB,
+  SALT_TAB,
+  SCTL_TAB,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -86,25 +88,33 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         );
 #endif
   switch (keycode){
+        case SALT_TAB: // super alt tab macro
         case ALT_TAB: // super alt tab macro
             if (record->event.pressed) {
                 if (!is_alt_tab_active) {
                     is_alt_tab_active = true;
                     register_code(KC_LALT);
                 }
+
+                if (keycode == SALT_TAB) register_code(KC_LSFT);
                 register_code(KC_TAB);
             } else {
+                if (keycode == SALT_TAB) unregister_code(KC_LSFT);
                 unregister_code(KC_TAB);
             }
             break;
+        case SCTL_TAB: // super ctrl tab macro
         case CTL_TAB: // super ctrl tab macro
             if (record->event.pressed) {
                 if (!is_ctl_tab_active) {
                     is_ctl_tab_active = true;
                     register_code(KC_LCTL);
                 }
+
+                if (keycode == SCTL_TAB) register_code(KC_LSFT);
                 register_code(KC_TAB);
             } else {
+                if (keycode == SCTL_TAB) unregister_code(KC_LSFT);
                 unregister_code(KC_TAB);
             }
             break;
