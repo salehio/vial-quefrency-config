@@ -21,6 +21,11 @@ enum custom_keycodes {
   CTL_TAB,
   SALT_TAB,
   SCTL_TAB,
+  VDESK_0, // Always keep VDESK consecutive.
+  VDESK_1,
+  VDESK_2,
+  VDESK_3,
+  VDESK_4,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -76,20 +81,20 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef CONSOLE_ENABLE
-  uprintf("0x%04X,%u,%u,%u,%b,0x%02X,0x%02X,%u\n",
-        keycode,
-        record->event.key.row,
-        record->event.key.col,
-        get_highest_layer(layer_state),
-        record->event.pressed,
-        get_mods(),
-        get_oneshot_mods(),
-        record->tap.count
-        );
+//  uprintf("0x%04X,%u,%u,%u,%b,0x%02X,0x%02X,%u\n",
+//        keycode,
+//        record->event.key.row,
+//        record->event.key.col,
+//        get_highest_layer(layer_state),
+//        record->event.pressed,
+//        get_mods(),
+//        get_oneshot_mods(),
+//        record->tap.count
+//        );
 #endif
   switch (keycode){
         case SALT_TAB: // super alt tab macro
-        case ALT_TAB: // super alt tab macro
+        case ALT_TAB:
             if (record->event.pressed) {
                 if (!is_alt_tab_active) {
                     is_alt_tab_active = true;
@@ -104,7 +109,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
         case SCTL_TAB: // super ctrl tab macro
-        case CTL_TAB: // super ctrl tab macro
+        case CTL_TAB:
             if (record->event.pressed) {
                 if (!is_ctl_tab_active) {
                     is_ctl_tab_active = true;
@@ -118,6 +123,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_TAB);
             }
             break;
+#ifdef CONSOLE_ENABLE
+        case VDESK_0:
+        case VDESK_1:
+        case VDESK_2:
+        case VDESK_3:
+        case VDESK_4:
+            if (record->event.pressed) {
+                int desktop_index = keycode - VDESK_0;
+                uprintf("D:%u\n", desktop_index);
+            }
+            break;
+#endif
         return false;
      }
   return true;
