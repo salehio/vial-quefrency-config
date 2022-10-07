@@ -27,6 +27,7 @@ enum custom_keycodes {
   VDESK_3,
   VDESK_4,
   FOCUSWIN,
+  AUDIOMT,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -50,16 +51,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code(KC_VOLU);
         } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_VOLD);
         }
     }
     else if (index == 1) {
         if (clockwise) {
-            tap_code(KC_VOLU);
+            uprintf("A:U\n");
         } else {
-            tap_code(KC_VOLD);
+            uprintf("A:D\n");
         }
     }
     return false;
@@ -138,6 +139,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case FOCUSWIN:
             if (record->event.pressed) {
                 uprintf("F\n");
+            }
+            break;
+        case AUDIOMT:
+            if (record->event.pressed) {
+                uprintf("A:M\n");
             }
             break;
 #endif
